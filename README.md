@@ -23,6 +23,10 @@ Playroom allows you to create a zero-install code-oriented design environment, b
 
 [Overdrive](http://overdrive.autoguru.io/playroom/#?code=N4Igxg9gJgpiBcIA8AhCAPABAIwwZQAsBDKCAdwF4AdEAZhswAcSoBLAOwHMLgBtG+iAA0mGgDYaAXQC+APirtMmJHgAuRMAGtMAZ2ZgO3cTXmKlygCox0qgMIR26jjABOmAjBKGeSABKe2LllfVkxVDxcYTEBeDcBpHaQAen8vILkFc3MkKxtZAHUYABtIAFso1Qgwj0wAQQBXcoBxWpdazFgdVk5FHQBPHVUYYswAWkwAeQA3VygXVimAQkTs1VMMpes7Byd2V1N0zOWASXZGeqYCjRgCCALYF2oQX3JMIkjMHohagH4GBNXlBJqDSaUyJNDoUwgaRAA)
 
+[Cubes](https://cubes.trampoline.cx/) (Themed)
+
+[Mesh Design System](https://www.meshdesignsystem.com/playroom/) (Themed)
+
 Send us a PR if you'd like to be in this list!
 
 ## Getting Started
@@ -54,7 +58,8 @@ module.exports = {
   themes: './src/themes',
   snippets: './playroom/snippets.js',
   frameComponent: './playroom/FrameComponent.js',
-  widths: [320, 375, 768, 1024],
+  scope: './playroom/useScope.js',
+  widths: [320, 768, 1024],
   port: 9000,
   openBrowser: true,
   paramType: 'search', // default is 'hash'
@@ -120,11 +125,24 @@ If your components need to be nested within custom provider components, you can 
 
 ```js
 import React from 'react';
-import ThemeProvider from '../path/to/your/ThemeProvider';
+import { ThemeProvider } from '../path/to/your/theming-system';
 
-export default ({ theme, children }) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
-);
+export default function FrameComponent({ theme, children }) {
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+}
+```
+
+## Custom Scope
+
+You can provide extra variables within the scope of your JSX via the `scope` option, which is a path to a file that exports a `useScope` Hook that returns a scope object. For example, if you wanted to expose a context-based `theme` variable to consumers of your Playroom:
+
+```js
+import { useTheme } from '../path/to/your/theming-system';
+
+export default function useScope() {
+  return {
+    theme: useTheme(),
+  };
 ```
 
 ## Theme Support
